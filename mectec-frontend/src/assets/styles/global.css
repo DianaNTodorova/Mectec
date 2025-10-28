@@ -1,15 +1,17 @@
 /* src/assets/styles/global.css */
 
 :root {
-  --primary-color: #0076C0;
+  --primary-color: #0076C0!important;
   --secondary-color: #f8f9fa;
   --text-dark: #212529;
   --text-light: #002d55;
   --border-radius: 8px;
 }
 .color-primary{
-    color:#0076C0;
-
+    color: var(--primary-color);
+}
+.text-primary{
+    color: var(--primary-color) !important;
 }
 
 body {
@@ -31,13 +33,13 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color)!important;
   border-color: var(--primary-color);
 }
 
 .btn-primary:hover {
-  background-color: #0076C0;
-  border-color: #0076C0;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
 }
 
 /* Material Symbols Styling */
@@ -62,4 +64,5 @@ body {
 .add-shopping-cart {
   font-size: 24px !important;
   vertical-align: middle;
+  color: var(--primary-color) !important;
 }

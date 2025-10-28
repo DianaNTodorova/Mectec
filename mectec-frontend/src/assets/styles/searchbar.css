@@ -4,7 +4,7 @@
   align-items: center;
   gap: 12px;
   margin: 40px auto;
-  max-width: 600px;
+  max-width: 900px;
 }
 
 .search-bar input {
@@ -16,7 +16,7 @@
 }
 
 .search-bar button {
-  background-color: #0076c0;
+  background-color: var(--primary-color);
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -24,5 +24,6 @@
 }
 
 .search-bar button:hover {
-  background-color: #005f9a;
+  background-color: var(--primary-color);
+  opacity: 0.9;
 }
