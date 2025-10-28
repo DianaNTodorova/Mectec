@@ -1,0 +1,106 @@
+/* src/assets/styles/products.css */
+
+/* Products Container - 80% width */
+.products-container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Product Grid Layout */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* Product Card Styling */
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.product-card img {
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.product-card h5 {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.product-card p {
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+
+/* Bootstrap Grid Product Images - Fill Space */
+.product-image-container {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .product-image {
+  transform: scale(1.03);
+}
+
+/* Card Body Improvements */
+.card {
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+  min-height: 2.4rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-text {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #002d55;
+}
+
+/* Button Improvements */
+.btn-sm .material-symbols-outlined {
+  font-size: 18px;
+}
