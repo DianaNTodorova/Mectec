@@ -6,22 +6,25 @@ import ProductDetail from './pages/ProductDetail';
 import Support from './pages/Support';
 import Basket from './pages/Basket';
 import Login from './pages/Login';
+import { BasketProvider } from './context/BasketContext';
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <div >
-        <Routes>  
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/basket" element={<Basket />} />
-        </Routes>
-      </div>
-    </Router>
+    <BasketProvider>
+      <Router>
+        <Navbar />
+        <div >
+          <Routes>  
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/basket" element={<Basket />} />
+          </Routes>
+        </div>
+      </Router>
+    </BasketProvider>
   );
 }
 

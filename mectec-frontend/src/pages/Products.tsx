@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import { products } from "../data/products";
 import SearchBar from "../components/SearchBar";
+import { useBasket } from "../context/BasketContext";
 
 export default function Products() {
+  const { addToBasket } = useBasket();
+
+  const handleAddToBasket = (product: typeof products[0]) => {
+    addToBasket(product);
+  };
+
   return (
     <div className="products-container">
       <SearchBar />
@@ -21,11 +28,15 @@ export default function Products() {
                   <Link to={`/products/${product.id}`} className="btn btn-primary btn-sm flex-fill">
                     Läs mer
                   </Link>
-                  <Link to={`/basket`} className="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style={{minWidth: '40px'}}>
+                  <button 
+                    onClick={() => handleAddToBasket(product)}
+                    className="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" 
+                    style={{minWidth: '40px'}}
+                  >
                     <span className="material-symbols-outlined add-shopping-cart">
                       add_shopping_cart
                     </span>
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

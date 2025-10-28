@@ -1,8 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
 import "../assets/styles/nav.css";
 import imgLogo from "../assets/images/mectec-logo.png";
+import { useBasket } from "../context/BasketContext";
 
 export default function Navbar() {
+  const { getTotalItems } = useBasket();
+  const totalItems = getTotalItems();
+
   return (
     <nav className="navbar navbar-expand-lg custom-navbar">
       <div className="container-fluid">
@@ -54,7 +58,9 @@ export default function Navbar() {
                   shopping_cart
                 </span>
               </Link>
-              <span className="cart-badge">2</span>
+              {totalItems > 0 && (
+                <span className="cart-badge">{totalItems}</span>
+              )}
             </li>
           </ul>
         </div>

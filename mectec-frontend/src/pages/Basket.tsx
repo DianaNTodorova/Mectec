@@ -1,28 +1,23 @@
 import type { ReactElement } from "react";
+import CheckoutProgress from "../components/CheckoutProgress";
+import { useBasket } from "../context/BasketContext";
 
 export default function Basket(): ReactElement {
-  // Mock basket items - in a real app, this would come from state management
-  const basketItems = [
-    {
-      id: 1,
-      name: "Precision Tool A",
-      price: 1250,
-      quantity: 2,
-      image: "https://via.placeholder.com/80x80"
-    },
-    {
-      id: 2,
-      name: "Industrial Component B",
-      price: 850,
-      quantity: 1,
-      image: "https://via.placeholder.com/80x80"
-    }
-  ];
+  const { basketItems, updateQuantity, removeFromBasket, getTotalAmount } = useBasket();
+  
+  const totalAmount = getTotalAmount();
 
-  const totalAmount = basketItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const handleQuantityChange = (productId: number, newQuantity: number) => {
+    updateQuantity(productId, newQuantity);
+  };
+
+  const handleRemoveItem = (productId: number) => {
+    removeFromBasket(productId);
+  };
 
   return (
     <div className="container mt-4">
+      <CheckoutProgress step={1} />
       <h1 className="mb-4">Varukorg</h1>
       
       {basketItems.length === 0 ? (
@@ -47,16 +42,38 @@ export default function Basket(): ReactElement {
                     </div>
                     <div className="col-2">
                       <div className="input-group input-group-sm">
-                        <button className="btn btn-outline-secondary" type="button">-</button>
-                        <input type="text" className="form-control text-center" value={item.quantity} readOnly />
-                        <button className="btn btn-outline-secondary" type="button">+</button>
+                        <button 
+                          className="btn btn-outline-secondary" 
+                          type="button"
+                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                        >
+                          -
+                        </button>
+                        <input 
+                          type="text" 
+                          className="form-control text-center" 
+                          value={item.quantity} 
+                          readOnly 
+                        />
+                        <button 
+                          className="btn btn-outline-secondary" 
+                          type="button"
+                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                     <div className="col-2 text-end">
                       <strong>{item.price} kr</strong>
                     </div>
                     <div className="col-2 text-end">
-                      <button className="btn btn-sm btn-outline-danger">Ta bort</button>
+                      <button 
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => handleRemoveItem(item.id)}
+                      >
+                        Ta bort
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -87,19 +104,7 @@ export default function Basket(): ReactElement {
                   <strong>{Math.round(totalAmount * 1.2)} kr</strong>
                 </div>
                 
-                <button className="btn btn-primary w-100 mb-2">Gå till kassan</button>
-                <button className="btn btn-outline-secondary w-100">Fortsätt handla</button>
-              </div>
-            </div>
-            
-            <div className="card mt-3">
-              <div className="card-body">
-                <h6 className="card-title">Kundservice</h6>
-                <p className="card-text small">
-                  Behöver du hjälp med din beställning?<br />
-                  <strong>Telefon:</strong> +46 123 456 789<br />
-                  <strong>Email:</strong> order@mectec.se
-                </p>
+                <button className="btn btn-primary w-100">Gå till kassan</button>
               </div>
             </div>
           </div>
