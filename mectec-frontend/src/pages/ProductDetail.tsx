@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 import { products } from "../data/products";
 import { useBasket } from "../context/BasketContext";
 import "../assets/styles/productdetails.css";
@@ -6,6 +7,7 @@ import "../assets/styles/productdetails.css";
 export default function ProductDetail() {
   const { id } = useParams();
   const { addToBasket } = useBasket();
+  const [quantity, setQuantity] = useState(1);
   const product = products.find(p => p.id === Number(id));
 
   if (!product) {
@@ -20,7 +22,29 @@ export default function ProductDetail() {
   }
 
   const handleAddToBasket = () => {
-    addToBasket(product);
+    // Add the product with the selected quantity by calling addToBasket multiple times
+    // This works with the current BasketContext implementation
+    for (let i = 0; i < quantity; i++) {
+      addToBasket(product);
+    }
+    // Reset quantity to 1 after adding to basket
+    setQuantity(1);
+  };
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity >= 1) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const increaseQuantity = () => {
+    setQuantity(prev => prev + 1);
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
+    }
   };
 
   // Mock specifications data - in a real app, this would come from the product data
@@ -52,7 +76,8 @@ export default function ProductDetail() {
                 </div>
                 
                 <div className="product-summary">
-                  <h1 className="product-title">{product.name}</h1>
+                  <h1 className="product-title">{product.name}
+                  {product.storlek && <span className="product-size mb-4 fs-5"> {product.storlek}</span>}</h1>
                   
                   <div className="price-section mb-3">
                     <span className="current-price">{product.price} kr</span>
@@ -81,10 +106,30 @@ export default function ProductDetail() {
                   <div className="action-section mb-3">
                     <div className="quantity-selector mb-3">
                       <label htmlFor="quantity" className="form-label">Antal:</label>
-                      <div className="input-group" style={{maxWidth: '120px'}}>
-                        <button className="btn btn-outline-secondary" type="button">-</button>
-                        <input type="number" className="form-control text-center" id="quantity" value="1" min="1" />
-                        <button className="btn btn-outline-secondary" type="button">+</button>
+                      <div className="input-group" style={{maxWidth: '160px'}}>
+                        <button 
+                          className="btn btn-outline-secondary" 
+                          type="button"
+                          onClick={decreaseQuantity}
+                          disabled={quantity <= 1}
+                        >
+                          -
+                        </button>
+                        <input 
+                          type="number" 
+                          className="form-control text-center" 
+                          id="quantity" 
+                          value={quantity} 
+                          min="1" 
+                          onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
+                        />
+                        <button 
+                          className="btn btn-outline-secondary" 
+                          type="button"
+                          onClick={increaseQuantity}
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
 
