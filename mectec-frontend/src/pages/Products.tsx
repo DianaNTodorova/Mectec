@@ -22,7 +22,23 @@ export default function Products() {
                 <img src={product.image} className="card-img-top product-image" alt={product.name} />
               </div>
               <div className="card-body d-flex flex-column">
-                <h5 className="card-title">{product.name}</h5>
+                <h5 className="card-title">
+                  {product.name}
+                  {product.storlek && <span className="product-size"> {product.storlek}</span>}
+                </h5>
+                <div className="stock-info mb-2">
+                  {product.saldo && product.saldo > 0 ? (
+                    <span className="stock-status in-stock">
+                      <span className="stock-dot green-dot"></span>
+                      <small>I lager ({product.saldo} st)</small>
+                    </span>
+                  ) : (
+                    <span className="stock-status out-of-stock">
+                      <span className="stock-dot red-dot"></span>
+                      <small>Ej i lager</small>
+                    </span>
+                  )}
+                </div>
                 <p className="card-text fw-bold">{product.price} kr</p>
                 <div className="mt-auto d-flex gap-2">
                   <Link to={`/products/${product.id}`} className="btn btn-primary btn-sm flex-fill">

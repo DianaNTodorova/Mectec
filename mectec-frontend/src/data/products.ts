@@ -7,37 +7,52 @@ export interface Product {
   id: number;
   name: string;
   price: number;
+  storlek?: string;
   image: string;
+  use: string;
+  saldo?: number;
   description: string;
 }
 
 export const products: Product[] = [
   {
-    id: 1,
-    name: "Skruv M6",
-    price: 99,
+    id: 1001,
+    name: "Skruv M4",
+    price: 1.5,
+    storlek: "M4x20mm",
     image: imgSkruv,
-    description: "Stålskruv för industriellt bruk."
+    use: "inomhusmöbler",
+    saldo: 500,
+    description: "En standard möbelskruv i dimensionen M4x20 mm, tillverkad i galvaniserat stål för ökad rostbeständighet. Lämplig för montering av mindre trädetaljer, beslag och möbelkomponenter. Krysspår (PH2) för enkel montering med skruvdragare."
   },
   {
-    id: 2,
-    name: "Sågmaskin X2000",
-    price: 34,
+    id: 1002,
+    name: "Skruv M5",
+    price: 2,
+    storlek: "M5x30mm",
     image: imgSkruvTwo,
-    description: "Kraftfull sågmaskin för verkstäder."
+    use: "inomhusmöbler, utomhusmöbler",
+    saldo: 7000,
+    description: "Robust möbelskruv i dimensionen M5x30 mm. Försedd med försänkt huvud för en snygg infästning i trä eller spånskiva. Tillverkad i elförzinkat stål för god hållbarhet."
   },
   {
-    id: 3,
-    name: "Skruv Pro",
-    price: 99,
+    id: 1003,
+    name: "Skruv M6",
+    price: 2,
+    storlek: "M6x40mm",
     image: imgSkruvTree,
-    description: "Högpresterande borrmaskin."
+    use: "köksinredning, utomhusmöbler",
+    saldo: 100,
+    description: "Extra stark skruv i dimensionen M6x40 mm. Passar för tyngre möbelmontage där extra bärighet krävs. Tillverkad i rostfritt stål (A2) för att tåla fuktiga miljöer."
   },
   {
-    id: 4,
+    id: 1004,
     name: "Skruv M6", 
-    price: 18,
+    price: 2.5,
+    storlek: "M6x40mm",
     image: imgSkruvFour,
-    description: "Högpresterande borrmaskin."
+    use: "köksinredning, utomhusmöbler",
+    saldo: 0,
+    description: "Extra stark skruv i dimensionen M6x40 mm. Passar för tyngre möbelmontage där extra bärighet krävs. Tillverkad i rostfritt stål (A2) för att tåla fuktiga miljöer."
   },
 ];
