@@ -1,4 +1,3 @@
-/* Product Detail Page Styles */
 
 .product-detail-container {
   padding: 2rem 0;
@@ -6,7 +5,7 @@
   min-height: 100vh;
 }
 
-/* Unified Product Card */
+
 .unified-product-card {
   background: white;
   border-radius: 12px;
@@ -172,7 +171,7 @@
   font-size: 20px;
 }
 
-/* Breadcrumb */
+
 .breadcrumb {
   background: white;
   border-radius: 8px;
@@ -184,7 +183,7 @@
   color: var(--primary-color);
 }
 
-/* Tabs */
+
 .nav-tabs {
   border-bottom: 2px solid #dee2e6;
   margin-bottom: 0;
@@ -220,7 +219,7 @@
   padding: 0;
 }
 
-/* Specifications */
+
 .specifications-grid {
   display: grid;
   gap: 1rem;
@@ -247,7 +246,7 @@
   color: #6c757d;
 }
 
-/* Delivery & Support Info */
+
 .delivery-info,
 .support-info {
   padding: 1rem 0;
@@ -298,7 +297,7 @@
   color: #6c757d;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .product-detail-container {
     padding: 1rem 0;

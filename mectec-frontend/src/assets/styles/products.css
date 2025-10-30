@@ -1,12 +1,10 @@
-/* src/assets/styles/products.css */
 
-/* Products Container - 80% width */
 .products-container {
   max-width: 1600px;
   margin: 0 auto;
 }
 
-/* Product Grid Layout */
+
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -14,7 +12,7 @@
   margin-top: 20px;
 }
 
-/* Product Card Styling */
+
 .product-card {
   background: #fff;
   border-radius: 12px;
@@ -45,7 +43,6 @@
   margin-bottom: 10px;
 }
 
-/* Bootstrap Grid Product Images - Fill Space */
 .product-image-container {
   height: 280px;
   display: flex;
@@ -68,7 +65,7 @@
   transform: scale(1.03);
 }
 
-/* Card Body Improvements */
+
 .card {
   transition: all 0.2s ease;
   border: 1px solid #dee2e6;
@@ -105,7 +102,7 @@
   color: var(--text-light);
 }
 
-/* Stock Status Styles for Products Page */
+
 .stock-info {
   display: flex;
   align-items: center;
@@ -145,12 +142,12 @@
   color: #dc3545;
 }
 
-/* Button Improvements */
+
 .btn-sm .material-symbols-outlined {
   font-size: 18px;
 }
 
-/* Product Card Button Styling */
+
 .card-body .btn-sm {
   height: 32px;
   display: flex;
@@ -164,7 +161,7 @@
   transition: none !important;
 }
 
-/* Fix hover color for shopping cart button */
+
 .btn-outline-primary:has(.add-shopping-cart):hover {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;

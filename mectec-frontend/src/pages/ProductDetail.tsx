@@ -11,14 +11,12 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load product from backend API
   useEffect(() => {
     const loadProduct = async () => {
       if (!id) return;
       
       setLoading(true);
       try {
-        // Try to fetch products from API
         const urls = [
           "http://localhost:5044/api/products",
           "https://localhost:7051/api/products"
@@ -32,15 +30,13 @@ export default function ProductDetail() {
               const foundProduct = apiProducts.find((p: Product) => p.id === Number(id));
               setProduct(foundProduct || null);
               setLoading(false);
-              return; // Exit if successful
+              return; 
             }
           } catch (error) {
             console.log(`Failed to fetch from ${url}:`, error);
           }
         }
-        
-        // Fallback to local storage if API fails
-        console.log('API failed, checking local storage...');
+
         const savedProducts = localStorage.getItem('createdProducts');
         if (savedProducts) {
           const parsedProducts: Product[] = JSON.parse(savedProducts);
@@ -87,12 +83,10 @@ export default function ProductDetail() {
   }
 
   const handleAddToBasket = () => {
-    // Add the product with the selected quantity by calling addToBasket multiple times
-    // This works with the current BasketContext implementation
+
     for (let i = 0; i < quantity; i++) {
       addToBasket(product);
     }
-    // Reset quantity to 1 after adding to basket
     setQuantity(1);
   };
 
@@ -110,16 +104,6 @@ export default function ProductDetail() {
     if (quantity > 1) {
       setQuantity(prev => prev - 1);
     }
-  };
-
-  // Mock specifications data - in a real app, this would come from the product data
-  const specifications = {
-    "Material": "Rostfritt stål",
-    "Storlek": "M6 x 20mm",
-    "Vikt": "15g",
-    "Finish": "Galvaniserad",
-    "Ursprung": "Sverige",
-    "Garanti": "2 år"
   };
 
   return (
@@ -223,32 +207,6 @@ export default function ProductDetail() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Specifications and Additional Info */}
-        <div className="row mt-5">
-          <div className="col-12">
-
-            <div className="tab-content" id="productTabsContent">
-              {/* Specifications Tab */}
-              <div className="tab-pane fade show active" id="specifications" role="tabpanel">
-                <div className="card border-0">
-                  <div className="card-body">
-                    <h5 className="card-title">Tekniska specifikationer</h5>
-                    <div className="specifications-grid">
-                      {Object.entries(specifications).map(([key, value]) => (
-                        <div key={key} className="spec-row">
-                          <div className="spec-label">{key}:</div>
-                          <div className="spec-value">{value}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>

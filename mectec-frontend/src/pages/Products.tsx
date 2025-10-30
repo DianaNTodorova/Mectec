@@ -7,8 +7,9 @@ import { useBasket } from "../context/BasketContext";
 export default function Products() {
   const { addToBasket } = useBasket();
   const [showModal, setShowModal] = useState(false);
-  const [allProducts, setAllProducts] = useState<Product[]>([]); // Start with empty array
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [allProducts, setAllProducts] = useState<Product[]>([]); 
+  const [loading, setLoading] = useState(true); 
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null); 
   const [formData, setFormData] = useState({
     title: "",
     articleNumber: "",
@@ -20,12 +21,11 @@ export default function Products() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Load products from backend API on component mount
+
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
       try {
-        // Try to fetch products from API
         const urls = [
           "http://localhost:5044/api/products",
           "https://localhost:7051/api/products"
@@ -39,25 +39,24 @@ export default function Products() {
               console.log('Loaded products from API:', apiProducts);
               setAllProducts(apiProducts);
               setLoading(false);
-              return; // Exit if successful
+              return; 
             }
           } catch (error) {
             console.log(`Failed to fetch from ${url}:`, error);
           }
         }
         
-        // Fallback to local storage if API fails
         console.log('API failed, using local storage...');
         const savedProducts = localStorage.getItem('createdProducts');
         if (savedProducts) {
           const parsedProducts: Product[] = JSON.parse(savedProducts);
           setAllProducts(parsedProducts);
         } else {
-          setAllProducts([]); // Empty array if no products found
+          setAllProducts([]); 
         }
       } catch (error) {
         console.error('Error loading products:', error);
-        setAllProducts([]); // Empty array on error
+        setAllProducts([]); 
       } finally {
         setLoading(false);
       }
@@ -80,13 +79,13 @@ export default function Products() {
             const apiProducts = await response.json();
             console.log('Refreshed products from API:', apiProducts);
             setAllProducts(apiProducts);
-            return true; // Success - exit immediately
+            return true; 
           }
         } catch (error) {
           console.log(`Failed to refresh from ${url}:`, error);
         }
       }
-      return false; // Failed
+      return false; 
     } catch (error) {
       console.error('Error refreshing products:', error);
       return false;
@@ -110,19 +109,23 @@ export default function Products() {
     setIsSubmitting(true);
 
     try {
-      const urls = [
+      const isEditing = editingProduct !== null;
+      const baseUrls = [
         "http://localhost:5044/api/products",  
         "https://localhost:7051/api/products" 
       ];
+      
+      const urls = isEditing 
+        ? baseUrls.map(url => `${url}/${editingProduct.id}`)
+        : baseUrls;
 
       let response = null;
       let lastError = null;
 
       for (const url of urls) {
         try {
-          console.log(`Trying to create product at ${url}...`);
+          console.log(`Trying to ${isEditing ? 'update' : 'create'} product at ${url}...`);
           
-          // Send as JSON to match backend DTO structure
           const jsonData = {
             title: formData.title,
             articleNumber: formData.articleNumber,
@@ -136,7 +139,7 @@ export default function Products() {
           console.log('Sending JSON data:', jsonData);
 
           response = await fetch(url, {
-            method: "POST",
+            method: isEditing ? "PUT" : "POST",
             headers: {
               "Content-Type": "application/json",
               "Accept": "application/json"
@@ -150,12 +153,12 @@ export default function Products() {
           if (response.ok) {
             const result = await response.json();
             console.log('Success response:', result);
-            alert('Produkten har skapats framgångsrikt!');
+            alert(isEditing ? 'Produkten har uppdaterats framgångsrikt!' : 'Produkten har skapats framgångsrikt!');
             
             const refreshed = await refreshProducts();
             if (refreshed) {
-              console.log('Products list refreshed with new product');
-            } else {
+              console.log(`Products list refreshed with ${isEditing ? 'updated' : 'new'} product`);
+            } else if (!isEditing) {
               console.log('Refresh failed, adding product locally');
               const newId = Math.max(...allProducts.map(p => p.id)) + 1;
               const productToAdd: Product = {
@@ -182,7 +185,7 @@ export default function Products() {
               stock: ""
             });
             setIsSubmitting(false);
-            return; // Exit if successful
+            return; 
           } else {
             const errorText = await response.text();
             console.error(`${url} Error response:`, errorText);
@@ -195,7 +198,6 @@ export default function Products() {
         }
       }
 
-      // If we get here, all URLs failed
       alert(`Fel vid skapande av produkt: ${lastError || 'Alla endpoints misslyckades'}.\n\nVill du aktivera Mock Mode för utveckling?`);
       
     } catch (error) {
@@ -209,6 +211,7 @@ export default function Products() {
   const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
+    setEditingProduct(null);
     setFormData({
       title: "",
       articleNumber: "",
@@ -218,6 +221,20 @@ export default function Products() {
       imageUrl: "",
       stock: ""
     });
+  };
+
+  const editProduct = (product: Product) => {
+    setEditingProduct(product);
+    setFormData({
+      title: product.title,
+      articleNumber: product.articleNumber || "",
+      category: product.category,
+      description: product.description,
+      price: product.price.toString(),
+      imageUrl: product.imageUrl || "",
+      stock: product.stock?.toString() || ""
+    });
+    setShowModal(true);
   };
 
   const deleteProduct = async (productId: number) => {
@@ -243,10 +260,10 @@ export default function Products() {
 
           if (response.ok) {
             console.log(`Product ${productId} deleted successfully`);
-            // Remove the product from local state immediately
+        
             setAllProducts(prev => prev.filter(p => p.id !== productId));
             alert('Produkten har tagits bort!');
-            return; // Exit after successful deletion
+            return; 
           } else {
             const errorText = await response.text();
             console.error(`Delete failed at ${url}:`, errorText);
@@ -256,7 +273,7 @@ export default function Products() {
         }
       }
       
-      // If all URLs failed
+     
       alert('Kunde inte ta bort produkten från backend');
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -348,6 +365,16 @@ export default function Products() {
                     </span>
                   </button>
                   <button 
+                    onClick={() => editProduct(product)}
+                    className="btn btn-outline-success btn-sm d-flex align-items-center justify-content-center" 
+                    style={{minWidth: '40px', pointerEvents: 'auto'}}
+                    title="Redigera produkt"
+                  >
+                    <span className="material-symbols-outlined">
+                      edit
+                    </span>
+                  </button>
+                  <button 
                     onClick={() => deleteProduct(product.id)}
                     className="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center" 
                     style={{minWidth: '40px'}}
@@ -371,7 +398,9 @@ export default function Products() {
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Skapa ny produkt</h5>
+                <h5 className="modal-title">
+                  {editingProduct ? 'Redigera produkt' : 'Skapa ny produkt'}
+                </h5>
                 <button 
                   type="button" 
                   className="btn-close" 
@@ -491,12 +520,12 @@ export default function Products() {
                     {isSubmitting ? (
                       <>
                         <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                        Skapar...
+                        {editingProduct ? 'Uppdaterar...' : 'Skapar...'}
                       </>
                     ) : (
                       <>
                         <span className="material-symbols-outlined me-2" style={{fontSize: '1.1rem'}}>save</span>
-                        Skapa produkt
+                        {editingProduct ? 'Uppdatera produkt' : 'Skapa produkt'}
                       </>
                     )}
                   </button>
