@@ -35,10 +35,11 @@ export default function Basket(): ReactElement {
                 {basketItems.map((item) => (
                   <div key={item.id} className="row align-items-center border-bottom py-3">
                     <div className="col-2">
-                      <img src={item.image} alt={item.name} className="img-fluid rounded" />
+                      <img src={item.imageUrl} alt={item.title} className="img-fluid rounded" style={{maxHeight: '80px', objectFit: 'cover'}} />
                     </div>
                     <div className="col-4">
-                      <h6>{item.name}</h6>
+                      <h6>{item.title}</h6>
+                      {item.articleNumber && <small className="text-muted">{item.articleNumber}</small>}
                     </div>
                     <div className="col-2">
                       <div className="input-group input-group-sm">

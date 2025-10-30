@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { products } from "../data/products";
+import { useState, useEffect } from "react";
+import type { Product } from "../data/products";
 import { useBasket } from "../context/BasketContext";
 import "../assets/styles/productdetails.css";
 
@@ -8,7 +8,72 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { addToBasket } = useBasket();
   const [quantity, setQuantity] = useState(1);
-  const product = products.find(p => p.id === Number(id));
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Load product from backend API
+  useEffect(() => {
+    const loadProduct = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      try {
+        // Try to fetch products from API
+        const urls = [
+          "http://localhost:5044/api/products",
+          "https://localhost:7051/api/products"
+        ];
+
+        for (const url of urls) {
+          try {
+            const response = await fetch(url);
+            if (response.ok) {
+              const apiProducts = await response.json();
+              const foundProduct = apiProducts.find((p: Product) => p.id === Number(id));
+              setProduct(foundProduct || null);
+              setLoading(false);
+              return; // Exit if successful
+            }
+          } catch (error) {
+            console.log(`Failed to fetch from ${url}:`, error);
+          }
+        }
+        
+        // Fallback to local storage if API fails
+        console.log('API failed, checking local storage...');
+        const savedProducts = localStorage.getItem('createdProducts');
+        if (savedProducts) {
+          const parsedProducts: Product[] = JSON.parse(savedProducts);
+          const foundProduct = parsedProducts.find(p => p.id === Number(id));
+          setProduct(foundProduct || null);
+        } else {
+          setProduct(null);
+        }
+      } catch (error) {
+        console.error('Error loading product:', error);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="container mt-4">
+        <div className="d-flex justify-content-center align-items-center" style={{minHeight: '400px'}}>
+          <div className="text-center">
+            <div className="spinner-border text-primary mb-3" role="status">
+              <span className="visually-hidden">Laddar...</span>
+            </div>
+            <p className="text-muted">Laddar produkt...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -69,15 +134,15 @@ export default function ProductDetail() {
               <div className="product-header">
                 <div className="product-image-section">
                   <img 
-                    src={product.image} 
+                    src={product.imageUrl} 
                     className="img-fluid product-detail-image" 
-                    alt={product.name} 
+                    alt={product.title} 
                   />
                 </div>
                 
                 <div className="product-summary">
-                  <h1 className="product-title">{product.name}
-                  {product.storlek && <span className="product-size mb-4 fs-5"> {product.storlek}</span>}</h1>
+                  <h1 className="product-title">{product.title}
+                  {product.articleNumber && <span className="product-size mb-4 fs-5"> {product.articleNumber}</span>}</h1>
                   
                   <div className="price-section mb-3">
                     <span className="current-price">{product.price} kr</span>
@@ -85,10 +150,10 @@ export default function ProductDetail() {
                   </div>
 
                   <div className="stock-status mb-3">
-                    {product.saldo && product.saldo > 0 ? (
+                    {product.stock && product.stock > 0 ? (
                       <div className="stock-item in-stock">
                         <span className="stock-dot green-dot"></span>
-                        <span className="stock-text">I lager ({product.saldo} st)</span>
+                        <span className="stock-text">I lager ({product.stock} st)</span>
                       </div>
                     ) : (
                       <div className="stock-item out-of-stock">
