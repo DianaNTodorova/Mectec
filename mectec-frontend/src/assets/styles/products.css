@@ -172,4 +172,18 @@
   color: white !important;
 }
 
+/* Responsive button text sizing */
+@media (max-width: 1299px) {
+  .responsive-btn-text {
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Ensure normal size on larger screens */
+@media (min-width: 1300px) {
+  .responsive-btn-text {
+    font-size: 0.875rem !important;
+  }
+}
+
 

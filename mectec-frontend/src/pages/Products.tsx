@@ -283,21 +283,25 @@ export default function Products() {
 
   return (
     <div className="products-container">
-      <div className="d-flex justify-content-between align-items-center mt-4 mb-4 p-3 bg-light rounded">
-        <div className="flex-grow-1 me-3">
+      {/* Mobile-first responsive toolbar */}
+      <div className="row mt-4 mb-4 p-3 bg-light rounded mx-1 mx-md-0">
+        <div className="col-12 col-md-8 col-lg-9 mb-3 mb-md-0">
           <SearchBar fullWidth={true} />
         </div>
-        <button 
-          className="btn btn-primary d-flex align-items-center"
-          onClick={openModal}
-          style={{ whiteSpace: 'nowrap' }}
-        >
-          <span className="material-symbols-outlined me-2">add</span>
-          Skapa ny produkt
-        </button>
+        <div className="col-12 col-md-4 col-lg-3">
+          <button 
+            className="btn btn-primary d-flex align-items-center justify-content-center w-100"
+            onClick={openModal}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            <span className="material-symbols-outlined me-2">add</span>
+            <span className="d-none d-sm-inline">Skapa ny produkt</span>
+            <span className="d-sm-none">Skapa</span>
+          </button>
+        </div>
       </div>
       
-      <div className="d-flex justify-content-between align-items-center m-4">
+      <div className="d-flex justify-content-between align-items-center mx-3 mx-md-4 mb-4">
         <div className="d-flex align-items-center gap-3">
           <h2>Produkter</h2>
           {loading && <span className="badge bg-warning">Laddar...</span>}
@@ -324,9 +328,9 @@ export default function Products() {
           </div>
         </div>
       ) : (
-        <div className="row">
+        <div className="row g-3 px-2 px-md-0">
         {allProducts.map(product => (
-          <div className="col-lg-3 col-md-4 col-sm-6 mb-4" key={product.id}>
+          <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3" key={product.id}>
             <div className="card h-100">
               <div className="product-image-container">
                 <img src={product.imageUrl} className="card-img-top product-image" alt={product.title} />
@@ -351,7 +355,7 @@ export default function Products() {
                 </div>
                 <p className="card-text fw-bold">{product.price} kr</p>
                 <div className="mt-auto d-flex gap-2">
-                  <Link to={`/products/${product.id}`} className="btn btn-primary btn-sm flex-fill">
+                  <Link to={`/products/${product.id}`} className="btn btn-primary btn-sm flex-fill responsive-btn-text">
                     Läs mer
                   </Link>
                   <button 
@@ -392,10 +396,10 @@ export default function Products() {
         </div>
       )}
 
-      {/* Create Product Modal */}
+      {/* Mobile-responsive Create Product Modal */}
       {showModal && (
         <div className="modal fade show d-block" tabIndex={-1} style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
-          <div className="modal-dialog modal-lg modal-dialog-centered">
+          <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable mx-3 mx-md-auto">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">

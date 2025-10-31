@@ -27,54 +27,105 @@ export default function Basket(): ReactElement {
         </div>
       ) : (
         <div className="row">
-          <div className="col-lg-8">
+          <div className="col-12 col-lg-8 mb-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Dina produkter</h5>
                 
                 {basketItems.map((item) => (
-                  <div key={item.id} className="row align-items-center border-bottom py-3">
-                    <div className="col-2">
-                      <img src={item.imageUrl} alt={item.title} className="img-fluid rounded" style={{maxHeight: '80px', objectFit: 'cover'}} />
-                    </div>
-                    <div className="col-4">
-                      <h6>{item.title}</h6>
-                      {item.articleNumber && <small className="text-muted">{item.articleNumber}</small>}
-                    </div>
-                    <div className="col-2">
-                      <div className="input-group input-group-sm">
-                        <button 
-                          className="btn btn-outline-secondary" 
-                          type="button"
-                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                        >
-                          -
-                        </button>
-                        <input 
-                          type="text" 
-                          className="form-control text-center" 
-                          value={item.quantity} 
-                          readOnly 
-                        />
-                        <button 
-                          className="btn btn-outline-secondary" 
-                          type="button"
-                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                        >
-                          +
-                        </button>
+                  <div key={item.id} className="border-bottom py-3">
+                    {/* Mobile: Stack vertically */}
+                    <div className="d-block d-md-none">
+                      <div className="row align-items-center mb-2">
+                        <div className="col-3">
+                          <img src={item.imageUrl} alt={item.title} className="img-fluid rounded" style={{maxHeight: '60px', objectFit: 'cover'}} />
+                        </div>
+                        <div className="col-9">
+                          <h6 className="mb-1">{item.title}</h6>
+                          {item.articleNumber && <small className="text-muted d-block">{item.articleNumber}</small>}
+                          <strong className="text-primary">{item.price} kr</strong>
+                        </div>
+                      </div>
+                      <div className="row align-items-center">
+                        <div className="col-6">
+                          <div className="input-group input-group-sm">
+                            <button 
+                              className="btn btn-outline-secondary" 
+                              type="button"
+                              onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                            >
+                              -
+                            </button>
+                            <input 
+                              type="text" 
+                              className="form-control text-center" 
+                              value={item.quantity} 
+                              readOnly 
+                            />
+                            <button 
+                              className="btn btn-outline-secondary" 
+                              type="button"
+                              onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                        <div className="col-6 text-end">
+                          <button 
+                            className="btn btn-sm btn-outline-danger"
+                            onClick={() => handleRemoveItem(item.id)}
+                          >
+                            <span className="material-symbols-outlined" style={{fontSize: '1rem'}}>delete</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="col-2 text-end">
-                      <strong>{item.price} kr</strong>
-                    </div>
-                    <div className="col-2 text-end">
-                      <button 
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => handleRemoveItem(item.id)}
-                      >
-                        Ta bort
-                      </button>
+                    
+                    {/* Desktop: Horizontal layout */}
+                    <div className="row align-items-center d-none d-md-flex">
+                      <div className="col-2">
+                        <img src={item.imageUrl} alt={item.title} className="img-fluid rounded" style={{maxHeight: '80px', objectFit: 'cover'}} />
+                      </div>
+                      <div className="col-4">
+                        <h6>{item.title}</h6>
+                        {item.articleNumber && <small className="text-muted">{item.articleNumber}</small>}
+                      </div>
+                      <div className="col-2">
+                        <div className="input-group input-group-sm">
+                          <button 
+                            className="btn btn-outline-secondary" 
+                            type="button"
+                            onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                          >
+                            -
+                          </button>
+                          <input 
+                            type="text" 
+                            className="form-control text-center" 
+                            value={item.quantity} 
+                            readOnly 
+                          />
+                          <button 
+                            className="btn btn-outline-secondary" 
+                            type="button"
+                            onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="col-2 text-end">
+                        <strong>{item.price} kr</strong>
+                      </div>
+                      <div className="col-2 text-end">
+                        <button 
+                          className="btn btn-sm btn-outline-danger"
+                          onClick={() => handleRemoveItem(item.id)}
+                        >
+                          Ta bort
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -82,8 +133,8 @@ export default function Basket(): ReactElement {
             </div>
           </div>
           
-          <div className="col-lg-4">
-            <div className="card">
+          <div className="col-12 col-lg-4">
+            <div className="card sticky-top" style={{top: '1rem'}}>
               <div className="card-body">
                 <h5 className="card-title">Ordersammanfattning</h5>
                 
@@ -93,7 +144,7 @@ export default function Basket(): ReactElement {
                 </div>
                 <div className="d-flex justify-content-between mb-2">
                   <span>Frakt:</span>
-                  <span>Gratis</span>
+                  <span className="text-success">Gratis</span>
                 </div>
                 <div className="d-flex justify-content-between mb-3">
                   <span>Moms (25%):</span>
@@ -105,7 +156,10 @@ export default function Basket(): ReactElement {
                   <strong>{Math.round(totalAmount * 1.2)} kr</strong>
                 </div>
                 
-                <button className="btn btn-primary w-100">Gå till kassan</button>
+                <button className="btn btn-primary w-100 btn-lg">
+                  <span className="material-symbols-outlined me-2">payment</span>
+                  Gå till kassan
+                </button>
               </div>
             </div>
           </div>
